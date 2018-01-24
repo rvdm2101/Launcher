@@ -1,0 +1,277 @@
+﻿<Window x:Class="Launcher.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Launcher"
+        mc:Ignorable="d"
+        Title="Launcher" Height="582.8" Width="1100" WindowStartupLocation="CenterScreen" Icon="Icons/LauncherLogo.ico" WindowStyle="None" ResizeMode="CanResize" Background="#FF3D3D3D" ShowInTaskbar="True" WindowState="Normal" AllowsTransparency="True" MinHeight="291.4" MinWidth="550" Activated="Window_Activated" Deactivated="Window_Deactivated" SizeChanged="Window_SizeChanged" Loaded="Window_Loaded">
+    <Window.Resources>
+        <Style x:Key="MyButton" TargetType="Button">
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Width" Value="75"/>
+            <Setter Property="Height" Value="19.2"/>
+            <Setter Property="Background" Value="#FFDFDFDF"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="border" BorderThickness="1" BorderBrush="#FF707070" Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="Functions" TargetType="Button">
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="Height" Value="auto"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="border" BorderThickness="0" BorderBrush="#FF707070" Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="ListButton" TargetType="Button">
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <ContentPresenter HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                        <ControlTemplate.Triggers/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="BorderButton" TargetType="Button">
+            <Setter Property="OverridesDefaultStyle" Value="True" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="border" BorderThickness="0" Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ExpanderBackground" TargetType="Expander">
+            <Setter Property="ContentTemplate">
+                <Setter.Value>
+                    <DataTemplate>
+                        <Border BorderThickness="0,1,0,0">
+                            <Grid>
+                                <Border Background="Transparent" Padding="0">
+                                    <ContentControl Margin="0" Content="{TemplateBinding Content}"/>
+                                </Border>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <Storyboard x:Key="ExpanderOpen">
+            <DoubleAnimation Duration="0:0:0.1" BeginTime="0" From="0" To="45" Storyboard.TargetProperty="Height" Storyboard.TargetName="ExpanderGrid"/>
+            <DoubleAnimation Duration="0:0:0.1" BeginTime="0:0:0.1" From="0" To="1" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="DeleteItem"/>
+            <DoubleAnimation Duration="0:0:0.1" BeginTime="0:0:0.1" From="0" To="1" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="SettingsItem"/>
+        </Storyboard>
+        <Storyboard x:Key="ExpanderClose">
+            <DoubleAnimation Duration="00:00:0.1" BeginTime="0" From="45" To="0" Storyboard.TargetProperty="Height" Storyboard.TargetName="ExpanderGrid"/>
+            <DoubleAnimation Duration="0:0:0.1" BeginTime="0" From="1" To="0" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="DeleteItem"/>
+            <DoubleAnimation Duration="0:0:0.1" BeginTime="0" From="1" To="0" Storyboard.TargetProperty="Opacity" Storyboard.TargetName="SettingsItem"/>
+        </Storyboard>
+        <Storyboard x:Key="EnterButton">
+            <ColorAnimation Duration="00:00:0.2" To="#FF5A5C60" Storyboard.TargetProperty="(Background).(SolidColorBrush.Color)"/>
+        </Storyboard>
+        <Storyboard x:Key="LeaveButton">
+            <ColorAnimation Duration="00:00:0.2" To="#005A5C60" Storyboard.TargetProperty="(Background).(SolidColorBrush.Color)"/>
+        </Storyboard>
+
+        <Storyboard x:Key="NewGradientColor">
+            <ColorAnimation Storyboard.TargetName="Main" Storyboard.TargetProperty="(Background). (LinearGradientBrush.GradientStops)[0].(GradientStop.Color)" From="#00000000" To="{x:Null}" Duration="0:0:1"/>
+        </Storyboard>
+
+        <Style x:Key="ListSelect" TargetType="{x:Type ListBoxItem}">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                        <Grid>
+                            <Border x:Name="IconBorder" Background="#7F000000" CornerRadius="0" BorderThickness="0" Margin="2,2,0,0">
+                                <ContentPresenter />
+                            </Border>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="Expander" TargetType="{x:Type Expander}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Expander}">
+                        <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <ToggleButton Grid.Row="0" OverridesDefaultStyle="True" Height="40">
+                                <ToggleButton.Style>
+                                    <Style TargetType="{x:Type ToggleButton}">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                                                    <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0" Background="#7F000000">
+                                                        <Button x:Name="ExpanderButton" BorderThickness="0" Background="Transparent" PreviewMouseLeftButtonDown="ExpanderButton_MouseLeftButtonDown" Style="{StaticResource BorderButton}">
+                                                            <Button.Resources>
+                                                                <Storyboard x:Key="ExpIconOpen">
+                                                                    <DoubleAnimation Storyboard.TargetName="ExpanderIcon" Storyboard.TargetProperty="RenderTransform.Angle" From="0" To="180" Duration="0:0:0.2" RepeatBehavior="1x"/>
+                                                                </Storyboard>
+
+                                                                <Storyboard x:Key="ExpIconClose">
+                                                                    <DoubleAnimation Storyboard.TargetName="ExpanderIcon" Storyboard.TargetProperty="RenderTransform.Angle" From="180" To="360" Duration="0:0:0.2" RepeatBehavior="1x"/>
+                                                                </Storyboard>
+                                                            </Button.Resources>
+                                                            <Grid Margin="0" Width="150">
+                                                                <Ellipse x:Name="ExpanderIcon" Margin="5" Height="30" Width="30" HorizontalAlignment="Left" Cursor="Hand" RenderTransformOrigin=".5,.5" Fill="{DynamicResource ExpanderIcon}">
+                                                                    <Ellipse.RenderTransform>
+                                                                        <RotateTransform />
+                                                                    </Ellipse.RenderTransform>
+                                                                </Ellipse>
+                                                            </Grid>
+                                                        </Button>
+                                                    </Grid>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </ToggleButton.Style>
+                            </ToggleButton>
+                            <ContentPresenter Grid.Row="1" Margin="0" VerticalAlignment="Top" HorizontalAlignment="Stretch"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Window.Style>
+        <Style TargetType="Window">
+            <Style.Triggers>
+                <Trigger Property="WindowState" Value="Maximized">
+                    <Setter Property="Width" Value="{Binding Source={x:Static SystemParameters.PrimaryScreenWidth}}" />
+                    <Setter Property="Height" Value="{Binding Source={x:Static SystemParameters.PrimaryScreenHeight}}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Style>
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="40"/>
+    </WindowChrome.WindowChrome>
+    <Grid>
+        <Grid x:Name="Border" Height="40" VerticalAlignment="Top" Margin="0">
+            <Rectangle Fill="#FF3D3D3D" Margin="0"/>
+            <Rectangle x:Name="Logo" Width="20" Margin="10,10,0,0" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Fill="{DynamicResource LauncherLogo}"/>
+            <Button x:Name="Add" WindowChrome.IsHitTestVisibleInChrome="True" Content="add" Margin="45,12,0,0" Style="{StaticResource Functions}" Click="Add_Click"/>
+            <Button x:Name="DelAll" WindowChrome.IsHitTestVisibleInChrome="True" Content="delete all" Margin="86,12,0,0" Style="{StaticResource Functions}" Click="DelAll_Click"/>
+            <Button x:Name="Scan" WindowChrome.IsHitTestVisibleInChrome="True" Content="Scan" Margin="165,12,0,0" Style="{StaticResource Functions}" Click="Scan_Click"/>
+
+            <Button x:Name="ButtonHide" HorizontalAlignment="Right" Margin="0,1,81,1" Width="40" Style="{StaticResource BorderButton}" Click="ButtonHide_Click" Background="#005A5C60" VerticalAlignment="Stretch" WindowChrome.IsHitTestVisibleInChrome="True">
+                <Button.Triggers>
+                    <EventTrigger RoutedEvent="MouseEnter">
+                        <BeginStoryboard  Storyboard="{StaticResource EnterButton}"/>
+                    </EventTrigger>
+                    <EventTrigger RoutedEvent="MouseLeave">
+                        <BeginStoryboard  Storyboard="{StaticResource LeaveButton}"/>
+                    </EventTrigger>
+                </Button.Triggers>
+                <Grid Height="40" Width="40">
+                    <Rectangle x:Name="Hide" Fill="{StaticResource ScreenHideButton}" Margin="0,13" Width="20" Height="20"/>
+                </Grid>
+            </Button>
+
+            <Button x:Name="ButtonSize" HorizontalAlignment="Right" Margin="0,1,41,1" Width="40" Style="{StaticResource BorderButton}" Click="ButtonSize_Click" Background="#005A5C60" VerticalAlignment="Stretch" WindowChrome.IsHitTestVisibleInChrome="True">
+                <Button.Triggers>
+                    <EventTrigger RoutedEvent="MouseEnter">
+                        <BeginStoryboard  Storyboard="{StaticResource EnterButton}"/>
+                    </EventTrigger>
+                    <EventTrigger RoutedEvent="MouseLeave">
+                        <BeginStoryboard  Storyboard="{StaticResource LeaveButton}"/>
+                    </EventTrigger>
+                </Button.Triggers>
+                <Grid Height="40" Width="40">
+                    <Rectangle x:Name="ScreenSize" Fill="{StaticResource NormalScreenButton}" Margin="0" Width="20" Height="20"/>
+                </Grid>
+            </Button>
+
+            <Button x:Name="ButtonClose" HorizontalAlignment="Right" Margin="1" Width="40" Style="{StaticResource BorderButton}" Click="ButtonClose_Click" Background="#005A5C60" VerticalAlignment="Stretch" WindowChrome.IsHitTestVisibleInChrome="True">
+                <Button.Triggers>
+                    <EventTrigger RoutedEvent="MouseEnter">
+                        <BeginStoryboard  Storyboard="{StaticResource EnterButton}"/>
+                    </EventTrigger>
+                    <EventTrigger RoutedEvent="MouseLeave">
+                        <BeginStoryboard  Storyboard="{StaticResource LeaveButton}"/>
+                    </EventTrigger>
+                </Button.Triggers>
+                <Grid Height="40" Width="40">
+                    <Rectangle x:Name="Close" Fill="{StaticResource CloseButton}" Margin="0" Width="20" Height="20"/>
+                </Grid>
+            </Button>
+            <Label Content="Launcher" FontSize="15" FontWeight="DemiBold" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White"/>
+        </Grid>
+
+        <StackPanel x:Name="MainBack" Margin="1,40,1,1" Background="#FF3D3D3D">
+            <Grid x:Name="Main" Margin="0" MinHeight="543">
+                <Grid.Background>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="#FF3D3D3D" Offset="0"/>
+                        <GradientStop Color="#00000000" Offset="1"/>
+                    </LinearGradientBrush>
+                </Grid.Background>
+
+                <ListBox x:Name="Listbox" HorizontalAlignment="Left" Margin="0" Width="275" Background="Transparent" BorderThickness="0" ItemContainerStyle="{StaticResource ListSelect}" ScrollViewer.CanContentScroll="False"/>
+
+                <Grid x:Name="TitleExe" HorizontalAlignment="Left" Margin="280,5,0,0" VerticalAlignment="Top" Height="60">
+                    <Rectangle Fill="#7F000000" Margin="0"/>
+                    <Image x:Name="IconExe" HorizontalAlignment="Left" Height="50" VerticalAlignment="Top" Width="50" Margin="5"/>
+                    <Label x:Name="NameExe" Content="" HorizontalAlignment="Left" Margin="60,0,0,0" Padding="5,0,15,0" VerticalContentAlignment="Center" FontWeight="Bold" FontSize="15" Foreground="White"/>
+                </Grid>
+                <Expander x:Name="Settings_exp" Header="Expander" HorizontalAlignment="Left" Margin="280,120,0,0" VerticalAlignment="Top" Width="150" Style="{StaticResource Expander}">
+                    <Grid x:Name="ExpanderGrid" Background="#7F000000" Height="0" Margin="0,-0.1,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="143*"/>
+                            <ColumnDefinition Width="7*"/>
+                        </Grid.ColumnDefinitions>
+                        <Button x:Name="SettingsItem" Margin="5" Content="Settings" Click="SettingsItem_Click" Opacity="0" Grid.ColumnSpan="2" Style="{StaticResource Functions}" FontSize="12"/>
+                        <Button x:Name="DeleteItem" Margin="5" ToolTip="This item will be deleted from this application, not from you device." Content="Delete item" Click="DeleteItem_Click" Opacity="0" Grid.ColumnSpan="2" Style="{StaticResource Functions}" FontSize="12" VerticalAlignment="Bottom"/>
+                    </Grid>
+                </Expander>
+                <Grid x:Name="StartExp" HorizontalAlignment="Left" Height="45" Margin="280,70,0,0" VerticalAlignment="Top" Width="150">
+                    <Rectangle Fill="#7F000000"/>
+                    <Button x:Name="Start" Content="start" Click="Start_Click" Margin="10" Style="{StaticResource MyButton}" Height="Auto" HorizontalAlignment="Stretch" Width="Auto" VerticalAlignment="Stretch"/>
+                </Grid>
+            </Grid>
+        </StackPanel>
+    </Grid>
+</Window>

@@ -1,0 +1,106 @@
+﻿<Window x:Class="Launcher.Settings"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Launcher"
+        mc:Ignorable="d"
+        Height="349.6" Width="550" Icon="Icons/LauncherLogo.ico" WindowStyle="None" ResizeMode="NoResize" Background="#FFEDEDED" ShowInTaskbar="False" WindowState="Normal" AllowsTransparency="True">
+    <Window.Resources>
+        <Style x:Key="BorderButton" TargetType="Button">
+            <Setter Property="OverridesDefaultStyle" Value="True" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="border" BorderThickness="0" Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                        <ControlTemplate.Triggers/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="Functions" TargetType="Button">
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="Height" Value="16"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Name="border" BorderThickness="0" BorderBrush="#FF707070" Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Storyboard x:Key="EnterButton">
+            <ColorAnimation Duration="00:00:0.2" To="#FF5A5C60" Storyboard.TargetProperty="(Background).(SolidColorBrush.Color)"/>
+        </Storyboard>
+        <Storyboard x:Key="LeaveButton">
+            <ColorAnimation Duration="00:00:0.2" To="#005A5C60" Storyboard.TargetProperty="(Background).(SolidColorBrush.Color)"/>
+        </Storyboard>
+        <Storyboard x:Key="NewGradientColor">
+            <ColorAnimation Storyboard.TargetName="Main" Storyboard.TargetProperty="(Background). (LinearGradientBrush.GradientStops)[0].(GradientStop.Color)" From="#00000000" To="{x:Null}" Duration="0:0:1"/>
+        </Storyboard>
+    </Window.Resources>
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="40"/>
+    </WindowChrome.WindowChrome>
+    <Grid>
+        <Grid x:Name="Border" Height="40" VerticalAlignment="Top" Margin="0">
+            <Rectangle Fill="#FF3D3D3D" Margin="0"/>
+            <Rectangle x:Name="Logo" Width="20" Margin="10,10,0,0" HorizontalAlignment="Left" Height="20" VerticalAlignment="Top" Fill="{DynamicResource LauncherLogo}"/>
+            <Label Content="Settings" Margin="35,0" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="15" Foreground="White" FontWeight="Bold"/>
+
+            <Button x:Name="ButtonClose" HorizontalAlignment="Right" Margin="1" Width="40" Style="{StaticResource BorderButton}" Click="ButtonClose_Click" Background="#005A5C60" VerticalAlignment="Stretch" WindowChrome.IsHitTestVisibleInChrome="True">
+                <Button.Triggers>
+                    <EventTrigger RoutedEvent="MouseEnter">
+                        <BeginStoryboard  Storyboard="{StaticResource EnterButton}"/>
+                    </EventTrigger>
+                    <EventTrigger RoutedEvent="MouseLeave">
+                        <BeginStoryboard  Storyboard="{StaticResource LeaveButton}"/>
+                    </EventTrigger>
+                </Button.Triggers>
+                <Grid Height="40" Width="40">
+                    <Rectangle x:Name="Close" Fill="{StaticResource CloseButton}" Margin="0" Width="20" Height="20"/>
+                </Grid>
+            </Button>
+        </Grid>
+        <Grid x:Name="Main" Margin="0,40,0,0">
+            <Grid HorizontalAlignment="Left" Height="60" Margin="10,10,0,0" VerticalAlignment="Top">
+                <Rectangle Fill="#7F000000" Margin="0"/>
+                <Image x:Name="Icon" HorizontalAlignment="Left" Height="50" VerticalAlignment="Top" Width="50" Margin="5"/>
+                <Label x:Name="Name" Content="" HorizontalAlignment="Left" Margin="60,0,0,0" Padding="5,0,15,0" VerticalContentAlignment="Center" FontWeight="Bold" FontSize="15" Foreground="White"/>
+            </Grid>
+            <Grid HorizontalAlignment="Left" Height="43" Margin="10,100,0,0" VerticalAlignment="Top" Width="240">
+                <Rectangle Fill="#7F000000"/>
+                <Label Content="Name" Foreground="White" Margin="7,7,0,0" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                <TextBox x:Name="NewName" HorizontalAlignment="Left" Height="23" Margin="54,10,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="176" VerticalContentAlignment="Center"/>
+            </Grid>
+            <Grid HorizontalAlignment="Left" Height="45" Margin="10,158,0,0" VerticalAlignment="Top" Width="240">
+                <Rectangle Fill="#7F000000"/>
+                <Label Content="Class" Foreground="White" Margin="7,0" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                <ComboBox x:Name="Class" Margin="49,10,10,10"/>
+            </Grid>
+            <Grid HorizontalAlignment="Left" Height="67" Margin="265,100,0,0" VerticalAlignment="Top" Width="275">
+                <Rectangle Fill="#7F000000"/>
+                <Label Content="New class" Foreground="White" Margin="7" VerticalAlignment="Top" HorizontalAlignment="Left"/>
+                <TextBox x:Name="ClNa" Height="23" Margin="74,10,10,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" VerticalContentAlignment="Center"/>
+                <Button x:Name="ClAd" Content="Add class" Margin="0,38,10,0"  Style="{StaticResource Functions}" HorizontalAlignment="Right" Click="ClAd_Click"/>
+            </Grid>
+
+            <Button x:Name="save" Content="Save" Margin="426,274,0,0" Style="{StaticResource Functions}" Foreground="#FF3D3D3D" Click="save_Click"/>
+            <Button x:Name="cancel" Content="Cancel" Margin="484,274,0,0" Style="{StaticResource Functions}" Foreground="#FF3D3D3D" Click="cancel_Click" HorizontalAlignment="Left" Width="46" Height="16" VerticalAlignment="Top"/>
+        </Grid>
+    </Grid>
+</Window>
